@@ -46,8 +46,8 @@ class Register extends Component {
     const that = this;
     const {email,password} = this.state;
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-      console.log(user);
-      return user.user.updateProfile({displayName: that.state.displayName});
+      console.log(that.state);
+      return user.user.updateProfile({displayName: that.state.displayName, photoURL: that.state.profileimg});
     }).catch(function(error) {
       console.log(error);
     });
