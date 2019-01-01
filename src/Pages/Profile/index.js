@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Redirect} from 'react-router-dom';
 import Post from '../../Components/Post';
+import './Profile.css';
 
 class Profile extends Component {
     constructor(props){
@@ -34,8 +35,7 @@ class Profile extends Component {
       const that = this;
       let articles;
       var postRef = firebase.database().ref('user-posts/' + 
-          firebase.auth().currentUser.email.replace("$", "").replace(".", "").replace("#", "").replace("[", "").replace("]", "").replace(".", "")
-           + '/');
+          firebase.auth().currentUser.displayName);
            postRef.on('value', function(snapshot) {
               let allposts = snapshot.val();
               try{
@@ -70,7 +70,7 @@ class Profile extends Component {
           <div> 
                  <div className="panel">
   <div className="panel-header">
-    <img src={firebase.auth().currentUser.photoURL} alt={firebase.auth().currentUser.displayName} />
+    <img className="profileIMG" src={firebase.auth().currentUser.photoURL} alt={firebase.auth().currentUser.displayName} />
     <div className="panel-title">{firebase.auth().currentUser.displayName}</div>
     <div className="panel-title">{firebase.auth().currentUser.email}</div>
   </div>

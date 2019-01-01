@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './TheNavbar.css';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import firebase from 'firebase';
 
 class TheNavbar extends Component {
@@ -8,6 +8,7 @@ class TheNavbar extends Component {
     super(props);
     this.state = {
       logged: false,
+      redirect: false,
     }
   }
 
@@ -26,15 +27,18 @@ class TheNavbar extends Component {
   }
 
   logOut(){
+    const that = this;
     firebase.auth().signOut().then(function() {
       // Sign-out successful.
+      that.setState({logged: false});
+
     }).catch(function(error) {
       // An error happened.
     });
   }
   
   render() {
-    return (
+    return (    
       <div className="TheNavbar">
        <header className="navbar">
   <section className="navbar-section">
