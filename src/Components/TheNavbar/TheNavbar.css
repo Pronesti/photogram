@@ -1,0 +1,18 @@
+.TheNavbar{
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: lightgrey;
+    height: 60px;
+}
+
+
+.title{
+    font-family: 'Pacifico', cursive;
+    color: black;
+    padding: 15px;
+  }
+  
+  .division{
+    font-weight: lighter;
+    color: black;
+  }
