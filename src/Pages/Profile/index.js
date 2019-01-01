@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Redirect} from 'react-router-dom';
+import Post from '../../Components/Post';
 
 class Profile extends Component {
     constructor(props){
@@ -18,8 +19,9 @@ class Profile extends Component {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          _this.fetchPosts();
+         _this.fetchPosts();
           _this.setState({logged: true});
+          console.log(firebase.auth().currentUser);
 
         } else {
           // No user is signed in.
@@ -36,9 +38,13 @@ class Profile extends Component {
            + '/');
            postRef.on('value', function(snapshot) {
               let allposts = snapshot.val();
-              articles = Object.entries(allposts).map(article => {
-                return Object.assign({}, { id: article[0] }, article[1]);
-              });
+              try{
+                articles = Object.entries(allposts).map(article => {
+                  return Object.assign({}, { id: article[0] }, article[1]);
+                });
+              }catch(error){
+                console.log(error);
+              }
            that.setState({loading: false})
            that.setState({posts: articles});
               });
@@ -51,10 +57,7 @@ class Profile extends Component {
       if(this.state.posts)
       {
     return this.state.posts.map(post => 
-    (<div>
-<img src={post.img} alt={post.author} />
-<p>{post.epi}</p>
-    </div>));
+    (<Post author={post.author} authorpic={post.authorpic} img={post.img} epi={post.epi}/>));
      }}
     
   render() {
@@ -67,6 +70,8 @@ class Profile extends Component {
           <div> 
                  <div className="panel">
   <div className="panel-header">
+    <img src={firebase.auth().currentUser.photoURL} alt={firebase.auth().currentUser.displayName} />
+    <div className="panel-title">{firebase.auth().currentUser.displayName}</div>
     <div className="panel-title">{firebase.auth().currentUser.email}</div>
   </div>
   <div className="panel-nav">

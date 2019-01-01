@@ -24,6 +24,14 @@ class TheNavbar extends Component {
     });
 
   }
+
+  logOut(){
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
   
   render() {
     return (
@@ -45,8 +53,14 @@ class TheNavbar extends Component {
   <div className="loggedLinks">
   <Link to="/profile/"><div className="btn btn-link">Profile</div></Link>
   <Link to="/upload/"><div className="btn btn-link">Upload</div></Link>
+  <button className="btn btn-danger" onClick={() => this.logOut()}> X </button>
   </div> 
-  ) : ( <Link to="/login/"><div className="btn btn-link">Login/Register</div></Link>)}
+  ) : (
+    <div>
+      <Link to="/login/"><div className="btn btn-link">Login</div></Link>
+      <Link to="/register/"><div className="btn btn-link">Register</div></Link>
+    </div>
+   )}
     
     <a href="http://www.github.com/Pronesti" className="btn btn-link">GitHub</a>
   </section>

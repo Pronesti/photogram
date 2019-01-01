@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import firebase from 'firebase';
+import {Redirect} from 'react-router-dom';
 
 
 class Upload extends Component {
@@ -10,10 +11,25 @@ class Upload extends Component {
       file: null,
       fileContents: null,
       epi: "",
+      redirect: false,
     }
     this.handleFileSelected = this.handleFileSelected.bind(this);
     this.createPost = this.createPost.bind(this);
   }
+
+  componentDidMount = () => {
+    const _this = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+  
+      } else {
+        // No user is signed in.
+        _this.setState({redirect: true});
+      }
+    });
+  }
+  
 
   handleFileSelected(event, file){
     this.setState({file: file, fileContents: event.target.result});
@@ -60,7 +76,8 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   createPost(url){
     // A post entry.
   var postData = {
-    author: firebase.auth().currentUser.email,
+    author: firebase.auth().currentUser.displayName,
+    authorpic: firebase.auth().currentUser.photoURL,
     img: url,
     epi: this.state.epi
   };
@@ -71,7 +88,7 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
   updates['/posts/' + newPostKey] = postData;
-  updates['/user-posts/' + this.formatUser(firebase.auth().currentUser.email) + '/' + newPostKey] = postData;
+  updates['/user-posts/' + firebase.auth().currentUser.displayName + '/' + newPostKey] = postData;
 
   return firebase.database().ref().update(updates);
 
@@ -88,6 +105,9 @@ return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").
 }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to='/login/'/>;
+    }
     return (
       <div className="Upload">
 

@@ -5,7 +5,8 @@ import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import Home from './Pages/Home';
 import Profile from './Pages/Profile';
 import Upload from './Pages/Upload';
-import User from './Pages/User';
+import Register from './Pages/Register';
+import Login from './Pages/Login';
 
 class App extends Component {
   render() {
@@ -19,8 +20,8 @@ class App extends Component {
       <Route exact path="/" component={Home} />
       <Route path="/upload/" component={Upload} />
       <Route path="/profile/" component={Profile} />
-      <Route path="/login/" component={User} />
-      <Route path="/signin/" component={User} />
+      <Route path="/register/" component={Register} />
+      <Route path="/login/" component={Login} />
         </Switch>
       </div>
       </BrowserRouter>

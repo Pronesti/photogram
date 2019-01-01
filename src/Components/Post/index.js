@@ -1,25 +1,29 @@
 import React, { Component } from "react";
 import './Post.css';
 class Post extends Component {
+  constructor(props){
+    super(props);
+  }
+
   render() {
     return <article className="Post" ref="Post">
         <header>
           <div className="Post-user">
             <div className="Post-user-avatar">
-              <img src="http://meetthepopes.com/MP/wp-content/uploads/2017/02/Pope-Michael-1500x1500.jpg" alt="Chris" />
+              <img src={this.props.authorpic} alt={this.props.author} />
             </div>
             <div className="Post-user-nickname">
-              <span>Chris</span>
+              <span>{this.props.author}</span>
             </div>
           </div>
         </header>
         <div className="Post-image">
           <div className="Post-image-bg">
-            <img alt="Icon Living" src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" />
+            <img alt="Icon Living" src={this.props.img} />
           </div>
         </div>
         <div className="Post-caption">
-          <strong>Chris</strong> Moving the community!
+          <strong>{this.props.author}</strong> {this.props.epi}
         </div>
       </article>;
     }
