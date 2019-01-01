@@ -8,24 +8,54 @@ class Profile extends Component {
         this.state = {
             logged: false,
             redirect: false,
-        }
-        
+            posts: [],
+            loading: true,
+        }     
     }
 
     componentDidMount = () => {
         const _this = this;
-        console.log(firebase.auth().currentUser);
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          console.log(user);
+          _this.fetchPosts();
           _this.setState({logged: true});
+
         } else {
           // No user is signed in.
           _this.setState({redirect: true});
         }
       });
     }
+
+    fetchPosts(){
+      const that = this;
+      let articles;
+      var postRef = firebase.database().ref('user-posts/' + 
+          firebase.auth().currentUser.email.replace("$", "").replace(".", "").replace("#", "").replace("[", "").replace("]", "").replace(".", "")
+           + '/');
+           postRef.on('value', function(snapshot) {
+              let allposts = snapshot.val();
+              articles = Object.entries(allposts).map(article => {
+                return Object.assign({}, { id: article[0] }, article[1]);
+              });
+           that.setState({loading: false})
+           that.setState({posts: articles});
+              });
+         
+          return articles;
+    }
+   
+
+    listPosts(){
+      if(this.state.posts)
+      {
+    return this.state.posts.map(post => 
+    (<div>
+<img src={post.img} alt={post.author} />
+<p>{post.epi}</p>
+    </div>));
+     }}
     
   render() {
     if (this.state.redirect) {
@@ -33,8 +63,24 @@ class Profile extends Component {
       }
     return (
       <div className="Profile">
-        {firebase.auth().currentUser ? (<h1>{firebase.auth().currentUser.email}</h1>) : (<div className="loading loading-lg"></div>)}
-        <button onClick={() => console.log(this.state)}> Click </button>
+        {firebase.auth().currentUser ? (
+          <div> 
+                 <div className="panel">
+  <div className="panel-header">
+    <div className="panel-title">{firebase.auth().currentUser.email}</div>
+  </div>
+  <div className="panel-nav">
+    {/*<!-- navigation components: tabs, breadcrumbs or pagination -->*/}
+  </div>
+  <div className="panel-body">
+          {this.listPosts()}
+  </div>
+  <div className="panel-footer">
+    {/*<!-- buttons or inputs -->*/}
+  </div>
+</div>
+          </div>
+        ) : (<div className="loading loading-lg"></div>)}
       </div>
     );
   }

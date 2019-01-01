@@ -31,7 +31,6 @@ class User extends Component {
         this.setState({
             [e.target.name]: e.target.value
         })
-        console.log([e.target.name] + " " + e.target.value)
     }
 
   loginFunction(){
@@ -59,6 +58,18 @@ class User extends Component {
         }
       });
   }
+
+  signinFunction(){
+    const {email,password} = this.state;
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+      // ...
+    });
+  }
   render() {
     if (this.state.redirect) {
         return <Redirect to='/profile/'/>;
@@ -75,7 +86,7 @@ class User extends Component {
             </form>
             <div className="btn-group btn-group-block">
                 <button className="btn btn-primary" onClick={() => this.loginFunction()}>Log In</button>
-                <button className="btn btn-secondary">Sign In</button>
+                <button className="btn btn-secondary" onClick={() => this.signinFunction()}>Sign In</button>
                 </div>
             </div>
             )}

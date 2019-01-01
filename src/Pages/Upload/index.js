@@ -9,8 +9,10 @@ class Upload extends Component {
     this.state = {
       file: null,
       fileContents: null,
+      epi: "",
     }
     this.handleFileSelected = this.handleFileSelected.bind(this);
+    this.createPost = this.createPost.bind(this);
   }
 
   handleFileSelected(event, file){
@@ -18,6 +20,8 @@ class Upload extends Component {
   };
 
   uploadFile(){
+    let _this = this;
+
     // Create the file metadata
 var metadata = {
   contentType: 'image/jpeg'
@@ -37,6 +41,8 @@ function(snapshot) {
     case firebase.storage.TaskState.RUNNING: // or 'running'
       console.log('Upload is running');
       break;
+   default:
+    break;
   }
 }, function(error) {
 
@@ -46,14 +52,51 @@ function(snapshot) {
 // Upload completed successfully, now we can get the download URL
 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   console.log('File available at', downloadURL);
+  _this.createPost(downloadURL); 
 });
 });
   }
 
+  createPost(url){
+    // A post entry.
+  var postData = {
+    author: firebase.auth().currentUser.email,
+    img: url,
+    epi: this.state.epi
+  };
+
+  // Get a key for a new Post.
+  var newPostKey = firebase.database().ref().child('posts').push().key;
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/posts/' + newPostKey] = postData;
+  updates['/user-posts/' + this.formatUser(firebase.auth().currentUser.email) + '/' + newPostKey] = postData;
+
+  return firebase.database().ref().update(updates);
+
+  }
+
+  formatUser(user){
+return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").replace("]", "").replace(".", "");
+  }
+  
+  handleChange(e){
+    this.setState({
+        [e.target.name]: e.target.value
+    })
+}
+
   render() {
     return (
       <div className="Upload">
-      <FileInput
+
+
+<div className="empty">
+  <div className="empty-icon">
+  </div>
+  <p className="empty-title h5">Select Image</p>
+  <FileInput
       readAs='binary'
       multiple
      
@@ -67,8 +110,17 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
      // onCancel={ this.showInvalidFileTypeMessage }
      // onAbort={ this.resetCancelButtonClicked }
      />
+     <p className="empty-subtitle">Type your photo epigraph.</p>
+     <input type="textarea" className="form-input" rows="2" name="epi" onChange={(e) => this.handleChange(e)} />
+  <div className="empty-action">
+  <button className="btn btn-primary" onClick={() => this.uploadFile()}>UPLOAD</button>
+  </div>
+</div>
+
+
+      
      
-     <button className="btn btn-primary" onClick={() => this.uploadFile()}>UPLOAD</button>
+     
 
       </div>
     );
