@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import firebase from 'firebase';
 import {Redirect} from 'react-router-dom';
-import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants';
 
 
 class Upload extends Component {

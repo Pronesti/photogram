@@ -32,7 +32,7 @@ class Home extends Component {
 listPosts(){
   if(this.state.posts)
   {
-return this.state.posts.map(post => 
+return this.state.posts.reverse().map(post => 
 (<Post author={post.author} authorpic={post.authorpic} img={post.img} epi={post.epi}/>));
  }}
 

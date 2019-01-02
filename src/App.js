@@ -7,6 +7,9 @@ import Profile from './Pages/Profile';
 import Upload from './Pages/Upload';
 import Register from './Pages/Register';
 import Login from './Pages/Login';
+import Individual from './Pages/Individual';
+import ExProfile from './Pages/ExProfile';
+
 
 class App extends Component {
   render() {
@@ -22,6 +25,8 @@ class App extends Component {
       <Route path="/profile/" component={Profile} />
       <Route path="/register/" component={Register} />
       <Route path="/login/" component={Login} />
+      <Route path="/user/:displayName" component={ExProfile} />
+      <Route path="/post/:postid" component={Individual} />
         </Switch>
       </div>
       </BrowserRouter>

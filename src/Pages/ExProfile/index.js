@@ -5,15 +5,16 @@ import './Profile.css';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
 
-class Profile extends Component {
+class ExProfile extends Component {
     constructor(props){
         super(props);
         this.state = {
             logged: false,
             redirect: false,
-            posts: [],
+            posts: [0],
             loading: true,
-        }     
+        }
+        console.log(this.props.match.params);     
     }
 
     componentDidMount = () => {
@@ -36,7 +37,7 @@ class Profile extends Component {
       const that = this;
       let articles;
       var postRef = firebase.database().ref('user-posts/' + 
-          firebase.auth().currentUser.displayName);
+         this.props.match.params.displayName);
            postRef.on('value', function(snapshot) {
               let allposts = snapshot.val();
               try{
@@ -47,7 +48,7 @@ class Profile extends Component {
                 console.log(error);
               }
            that.setState({loading: false})
-           that.setState({posts: articles});
+           if(articles) that.setState({posts: articles});
               });
          
           return articles;
@@ -81,7 +82,7 @@ class Profile extends Component {
         return <Redirect to='/login/'/>;
       }
     return (
-      <div className="Profile">
+      <div className="ExProfile">
         {firebase.auth().currentUser ? (
          <div>
            <header>
@@ -98,7 +99,7 @@ class Profile extends Component {
 
     <div className="profile-user-settings">
 
-      <h1 className="profile-user-name">{firebase.auth().currentUser.displayName}</h1>
+      <h1 className="profile-user-name">{this.props.match.params.displayName}</h1>
 
       {/*<button className="btn-profile profile-edit--profile">Edit Profile</button> */}
 
@@ -153,5 +154,5 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+export default ExProfile;
  

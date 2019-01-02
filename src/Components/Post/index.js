@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
 import './Post.css';
 class Post extends Component {
  
@@ -20,7 +21,7 @@ class Post extends Component {
           </div>
         </div>
         <div className="Post-caption">
-          <strong>{this.props.author}</strong> {this.props.epi}
+          <strong><Link to={'/user/' +this.props.author}>{this.props.author}</Link></strong> {this.props.epi}
         </div>
       </article>;
     }
