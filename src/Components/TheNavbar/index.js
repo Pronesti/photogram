@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './TheNavbar.css';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import firebase from 'firebase';
 
 class TheNavbar extends Component {
@@ -47,9 +47,6 @@ class TheNavbar extends Component {
   <Link to="/"><h4 className="title"> Photogram</h4></Link>
   </section>
   <section className="navbar-center">
-  <div className="input-group input-inline">
-      <input className="form-input" type="text" placeholder="search" />
-    </div>
   </section>
   <section className="navbar-section">
 
@@ -57,16 +54,18 @@ class TheNavbar extends Component {
   <div className="loggedLinks">
   <Link to="/profile/"><div className="btn btn-link">Profile</div></Link>
   <Link to="/upload/"><div className="btn btn-link">Upload</div></Link>
-  <button className="btn btn-danger" onClick={() => this.logOut()}> X </button>
+  <a href="http://www.github.com/Pronesti" className="btn btn-link">GitHub</a>
+  <button className="btn btn-error" onClick={() => this.logOut()}> X </button>
   </div> 
   ) : (
     <div>
       <Link to="/login/"><div className="btn btn-link">Login</div></Link>
       <Link to="/register/"><div className="btn btn-link">Register</div></Link>
+      <a href="http://www.github.com/Pronesti" className="btn btn-link">GitHub</a>
     </div>
    )}
     
-    <a href="http://www.github.com/Pronesti" className="btn btn-link">GitHub</a>
+    
   </section>
 </header>
       </div>

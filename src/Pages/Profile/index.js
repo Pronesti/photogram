@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Redirect} from 'react-router-dom';
-import Post from '../../Components/Post';
+import Tile from '../../Components/Tile';
 import './Profile.css';
+import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
+
 
 class Profile extends Component {
     constructor(props){
@@ -53,11 +55,26 @@ class Profile extends Component {
     }
    
 
-    listPosts(){
+    listTiles(){
       if(this.state.posts)
       {
     return this.state.posts.map(post => 
-    (<Post author={post.author} authorpic={post.authorpic} img={post.img} epi={post.epi}/>));
+    (
+      <div className="gallery-item" tabIndex="0">
+
+      <img src={post.img} className="gallery-image" alt={post.author} />
+
+      <div className="gallery-item-info">
+
+        <ul>
+          <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><i className="fas fa-heart" aria-hidden="true"></i> 56</li>
+          <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><i className="fas fa-comment" aria-hidden="true"></i> 2</li>
+        </ul>
+
+      </div>
+
+    </div>
+    ));
      }}
     
   render() {
@@ -67,24 +84,70 @@ class Profile extends Component {
     return (
       <div className="Profile">
         {firebase.auth().currentUser ? (
-          <div> 
-                 <div className="panel">
-  <div className="panel-header">
-    <img className="profileIMG" src={firebase.auth().currentUser.photoURL} alt={firebase.auth().currentUser.displayName} />
-    <div className="panel-title">{firebase.auth().currentUser.displayName}</div>
-    <div className="panel-title">{firebase.auth().currentUser.email}</div>
+         <div>
+           <header>
+
+<div className="container">
+
+  <div className="profile">
+
+    <div className="profile-image">
+
+      <img className="fixprofilepic" src={firebase.auth().currentUser.photoURL} alt={firebase.auth().currentUser.displayName} />
+
+    </div>
+
+    <div className="profile-user-settings">
+
+      <h1 className="profile-user-name">{firebase.auth().currentUser.displayName}</h1>
+
+      {/*<button className="btn-profile profile-edit--profile">Edit Profile</button> */}
+
+      <button className="btn-profile profile-settings-btn" aria-label="profile settings"><i className="fas fa-cog" aria-hidden="true"></i></button>
+
+    </div>
+
+    <div className="profile-stats">
+
+      <ul>
+        <li><span className="profile-stat-count">{this.state.posts.length}</span> posts</li>
+        <li><span className="profile-stat-count">0</span> followers</li>
+        <li><span className="profile-stat-count">0</span> following</li>
+      </ul>
+
+    </div>
+
+    <div className="profile-bio">
+
+      <p><span className="profile-real-name" role="img">{firebase.auth().currentUser.displayName}</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
+
+    </div>
+
   </div>
-  <div className="panel-nav">
-    {/*<!-- navigation components: tabs, breadcrumbs or pagination -->*/}
-  </div>
-  <div className="panel-body">
-          {this.listPosts()}
-  </div>
-  <div className="panel-footer">
-    {/*<!-- buttons or inputs -->*/}
-  </div>
+
 </div>
-          </div>
+
+</header>
+
+<main>
+
+<div className="container">
+
+  <div className="gallery">
+
+          {this.listTiles()}
+    
+  </div>
+
+</div>
+
+</main>
+         </div>   
+
+
+
+
+          
         ) : (<div className="loading loading-lg"></div>)}
       </div>
     );

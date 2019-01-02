@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import './Post.css';
 class Post extends Component {
-  constructor(props){
-    super(props);
-  }
-
+ 
   render() {
     return <article className="Post" ref="Post">
         <header>

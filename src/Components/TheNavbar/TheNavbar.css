@@ -2,7 +2,8 @@
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: lightgrey;
-    height: 60px;
+    min-height: 60px;
+    font-size: 32px !important;
 }
 
 
@@ -15,4 +16,8 @@
   .division{
     font-weight: lighter;
     color: black;
+  }
+
+  .btn{
+    font-size: 32px;
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import firebase from 'firebase';
 import {Redirect} from 'react-router-dom';
+import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants';
 
 
 class Upload extends Component {
@@ -12,6 +13,10 @@ class Upload extends Component {
       fileContents: null,
       epi: "",
       redirect: false,
+      redirectProfile: false,
+      uploading:false,
+      progress: 0,
+      url: "",
     }
     this.handleFileSelected = this.handleFileSelected.bind(this);
     this.createPost = this.createPost.bind(this);
@@ -33,10 +38,11 @@ class Upload extends Component {
 
   handleFileSelected(event, file){
     this.setState({file: file, fileContents: event.target.result});
+    this.uploadFile();
   };
 
   uploadFile(){
-    let _this = this;
+    let that = this;
 
     // Create the file metadata
 var metadata = {
@@ -48,13 +54,15 @@ var metadata = {
 uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 function(snapshot) {
   // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;  
   console.log('Upload is ' + progress + '% done');
+  that.setState({progress: progress})
   switch (snapshot.state) {
     case firebase.storage.TaskState.PAUSED: // or 'paused'
       console.log('Upload is paused');
       break;
     case firebase.storage.TaskState.RUNNING: // or 'running'
+      that.setState({loading: true});
       console.log('Upload is running');
       break;
    default:
@@ -68,17 +76,17 @@ function(snapshot) {
 // Upload completed successfully, now we can get the download URL
 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   console.log('File available at', downloadURL);
-  _this.createPost(downloadURL); 
+  that.setState({url: downloadURL}); 
 });
 });
   }
 
-  createPost(url){
+  createPost(){
     // A post entry.
   var postData = {
     author: firebase.auth().currentUser.displayName,
     authorpic: firebase.auth().currentUser.photoURL,
-    img: url,
+    img: this.state.url,
     epi: this.state.epi
   };
 
@@ -90,8 +98,9 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   updates['/posts/' + newPostKey] = postData;
   updates['/user-posts/' + firebase.auth().currentUser.displayName + '/' + newPostKey] = postData;
 
+  this.setState({redirectProfile: true});
   return firebase.database().ref().update(updates);
-
+  
   }
 
   formatUser(user){
@@ -108,15 +117,17 @@ return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").
     if (this.state.redirect) {
       return <Redirect to='/login/'/>;
     }
+    if (this.state.redirectProfile) {
+      return <Redirect to='/profile/'/>;
+    }
     return (
       <div className="Upload">
 
 
 <div className="empty">
   <div className="empty-icon">
-  </div>
   <p className="empty-title h5">Select Image</p>
-  <FileInput
+   {this.state.uploading ? ("yes") : (<FileInput
       readAs='binary'
       multiple
      
@@ -129,11 +140,15 @@ return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").
      
      // onCancel={ this.showInvalidFileTypeMessage }
      // onAbort={ this.resetCancelButtonClicked }
-     />
+     />)}
+  </div>
+ 
+ 
+     <progress className="progress" value={this.state.progress} max="100"></progress>
      <p className="empty-subtitle">Type your photo epigraph.</p>
      <input type="textarea" className="form-input" rows="2" name="epi" onChange={(e) => this.handleChange(e)} />
   <div className="empty-action">
-  <button className="btn btn-primary" onClick={() => this.uploadFile()}>UPLOAD</button>
+  <button className="btn btn-primary" onClick={() => this.createPost()}>UPLOAD</button>
   </div>
 </div>
 
