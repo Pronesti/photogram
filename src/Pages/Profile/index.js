@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import './Profile.css';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
@@ -58,7 +58,7 @@ class Profile extends Component {
       if(this.state.posts)
       {
     return this.state.posts.reverse().map(post => 
-    (
+    ( <Link to={'/post/' + post.key}>
       <div className="gallery-item" tabIndex="0">
 
       <img src={post.img} className="gallery-image" alt={post.author} />
@@ -72,7 +72,7 @@ class Profile extends Component {
 
       </div>
 
-    </div>
+    </div></Link>
     ));
      }}
     
@@ -83,7 +83,7 @@ class Profile extends Component {
     return (
       <div className="Profile">
         {firebase.auth().currentUser ? (
-         <div>
+         <div>{console.log(firebase.auth().currentUser)}
            <header>
 
 <div className="container">
@@ -109,7 +109,7 @@ class Profile extends Component {
     <div className="profile-stats">
 
       <ul>
-        <li><span className="profile-stat-count">{this.state.posts.length}</span> posts</li>
+        <li><span className="profile-stat-count">{this.state.posts ? this.state.posts.length : ("")}</span> posts</li>
         <li><span className="profile-stat-count">0</span> followers</li>
         <li><span className="profile-stat-count">0</span> following</li>
       </ul>

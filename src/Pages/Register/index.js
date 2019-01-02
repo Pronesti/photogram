@@ -16,6 +16,7 @@ class Register extends Component {
             redirect: false,
             file: null,
             fileContents: null,
+            check: false,
         }
 
         this.handleFileSelected = this.handleFileSelected.bind(this);
@@ -47,11 +48,29 @@ class Register extends Component {
     const {email,password} = this.state;
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
       console.log(that.state);
+      that.database();
       return user.user.updateProfile({displayName: that.state.displayName, photoURL: that.state.profileimg});
     }).catch(function(error) {
       console.log(error);
     });
   }
+
+  database(){
+    const that = this;
+    // A post entry.
+  var userData = {
+    displayName: that.state.displayName,
+    photoURL: that.state.profileimg,
+  };
+
+  // Get a key for a new Post.
+ firebase.database().ref().child('users').push(userData);
+  }
+
+  formatUser(user){
+return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").replace("]", "").replace(".", "");
+  }
+
 
   handleFileSelected(event, file){
     this.setState({file: file, fileContents: event.target.result});
@@ -92,7 +111,7 @@ function(snapshot) {
 // Upload completed successfully, now we can get the download URL
 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   console.log('File available at', downloadURL);
-  _this.setState({profileimg: downloadURL}); 
+  _this.setState({profileimg: downloadURL,check: true});
 });
 });
   }
@@ -147,7 +166,7 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
             </form>
   </div>
   <div className="card-footer">
-  <button className="btn btn-block btn-primary" onClick={() => this.registerUser()}>Sign In</button>
+  <button className="btn btn-block btn-primary" onClick={() => this.registerUser()} disabled={!this.state.check} >Sign In</button>
   </div>
 </div>
 

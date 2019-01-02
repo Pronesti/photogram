@@ -8,10 +8,10 @@ class Post extends Component {
         <header>
           <div className="Post-user">
             <div className="Post-user-avatar">
-              <img src={this.props.authorpic} alt={this.props.author} />
+            <Link to={'/user/' + this.props.author} ><img src={this.props.authorpic} alt={this.props.author} /></Link>
             </div>
             <div className="Post-user-nickname">
-              <span>{this.props.author}</span>
+             <Link to={'/user/' + this.props.author} ><span>{this.props.author}</span></Link>
             </div>
           </div>
         </header>

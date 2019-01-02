@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import './Profile.css';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,6 +13,7 @@ class ExProfile extends Component {
             redirect: false,
             posts: [0],
             loading: true,
+            userInfo: {},
         }
         console.log(this.props.match.params);     
     }
@@ -23,6 +24,7 @@ class ExProfile extends Component {
         if (user) {
           // User is signed in.
          _this.fetchPosts();
+         _this.fetchUserInfo();
           _this.setState({logged: true});
           console.log(firebase.auth().currentUser);
 
@@ -53,13 +55,27 @@ class ExProfile extends Component {
          
           return articles;
     }
+
+    fetchUserInfo(){
+      const that = this;
+      var postRef = firebase.database().ref('users/');
+           postRef.on('value', function(snapshot) {
+               snapshot.forEach(function(child){
+                 console.log(child.val().displayName);
+                 if (child.val().displayName === that.props.match.params.displayName){
+                   that.setState({userInfo: child.val()});
+                   console.log(that.state)
+                 }    
+               });       
+    });
+    }
    
 
     listTiles(){
       if(this.state.posts)
       {
     return this.state.posts.reverse().map(post => 
-    (
+    (<Link to={'/post/' + post.key}>
       <div className="gallery-item" tabIndex="0">
 
       <img src={post.img} className="gallery-image" alt={post.author} />
@@ -73,7 +89,7 @@ class ExProfile extends Component {
 
       </div>
 
-    </div>
+    </div></Link>
     ));
      }}
     
@@ -93,13 +109,13 @@ class ExProfile extends Component {
 
     <div className="profile-image">
 
-      <img className="fixprofilepic" src={firebase.auth().currentUser.photoURL} alt={firebase.auth().currentUser.displayName} />
+      <img className="fixprofilepic" src={this.state.userInfo.photoURL} alt={this.state.userInfo.displayName} />
 
     </div>
 
     <div className="profile-user-settings">
 
-      <h1 className="profile-user-name">{this.props.match.params.displayName}</h1>
+      <h1 className="profile-user-name">{this.state.userInfo.displayName}</h1>
 
       {/*<button className="btn-profile profile-edit--profile">Edit Profile</button> */}
 
@@ -119,7 +135,7 @@ class ExProfile extends Component {
 
     <div className="profile-bio">
 
-      <p><span className="profile-real-name">{firebase.auth().currentUser.displayName}</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit <span role="img" >📷✈️🏕️</span></p>
+      <p><span className="profile-real-name">{this.state.userInfo.displayName}</span>{" " + this.state.userInfo.description}</p>
 
     </div>
 

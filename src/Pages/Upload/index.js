@@ -13,7 +13,7 @@ class Upload extends Component {
       epi: "",
       redirect: false,
       redirectProfile: false,
-      uploading:false,
+      uploaded:false,
       progress: 0,
       url: "",
     }
@@ -75,22 +75,26 @@ function(snapshot) {
 // Upload completed successfully, now we can get the download URL
 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
   console.log('File available at', downloadURL);
-  that.setState({url: downloadURL}); 
+  that.setState({url: downloadURL, uploaded: true}); 
+
 });
 });
   }
 
   createPost(){
-    // A post entry.
-  var postData = {
-    author: firebase.auth().currentUser.displayName,
-    authorpic: firebase.auth().currentUser.photoURL,
-    img: this.state.url,
-    epi: this.state.epi
-  };
+  
 
   // Get a key for a new Post.
   var newPostKey = firebase.database().ref().child('posts').push().key;
+
+    // A post entry.
+    var postData = {
+      author: firebase.auth().currentUser.displayName,
+      authorpic: firebase.auth().currentUser.photoURL,
+      img: this.state.url,
+      epi: this.state.epi,
+      key: newPostKey,
+    };
 
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
@@ -125,8 +129,11 @@ return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").
 
 <div className="empty">
   <div className="empty-icon">
-  <p className="empty-title h5">Select Image</p>
-   {this.state.uploading ? ("yes") : (<FileInput
+  
+   {this.state.uploaded ? (<h1>COMPLETED!</h1>) : (
+    <div>
+   <p className="empty-title h5">Select Image</p>
+   <FileInput
       readAs='binary'
       multiple
      
@@ -139,15 +146,17 @@ return user.replace("$", "").replace(".", "").replace("#", "").replace("[", "").
      
      // onCancel={ this.showInvalidFileTypeMessage }
      // onAbort={ this.resetCancelButtonClicked }
-     />)}
+     /><br /><br />
+     <progress className="progress" value={this.state.progress} max="100"></progress> </div>)
+     }
   </div>
  
  
-     <progress className="progress" value={this.state.progress} max="100"></progress>
+     
      <p className="empty-subtitle">Type your photo epigraph.</p>
      <input type="textarea" className="form-input" rows="2" name="epi" onChange={(e) => this.handleChange(e)} />
   <div className="empty-action">
-  <button className="btn btn-primary" onClick={() => this.createPost()}>UPLOAD</button>
+  <button className="btn btn-primary" onClick={() => this.createPost()} disabled={!this.state.uploaded}>UPLOAD</button>
   </div>
 </div>
 
