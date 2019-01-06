@@ -75,15 +75,18 @@ img {
 
 .profile-image {
   float: left;
-  width: calc(33.333% - 10px);
+
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 3px;
+
 }
 
 .profile-image img {
-  border-radius: 100%;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
 }
 
 .profile-user-settings,

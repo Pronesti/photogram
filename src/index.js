@@ -7,15 +7,15 @@ import './../node_modules/spectre.css/dist/spectre.min.css';
 import firebase from 'firebase';
 
 var config = {
-  apiKey: "AIzaSyBjmxJu4fuOOFqmCksGhAYID3Rz2sW0l4E",
-  authDomain: "nextphotogram.firebaseapp.com",
-  databaseURL: "https://nextphotogram.firebaseio.com",
-  projectId: "nextphotogram",
-  storageBucket: "nextphotogram.appspot.com",
-  messagingSenderId: "1071195623566"
+  apiKey: 'AIzaSyBjmxJu4fuOOFqmCksGhAYID3Rz2sW0l4E',
+  authDomain: 'nextphotogram.firebaseapp.com',
+  databaseURL: 'https://nextphotogram.firebaseio.com',
+  projectId: 'nextphotogram',
+  storageBucket: 'nextphotogram.appspot.com',
+  messagingSenderId: '1071195623566'
 };
 
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
