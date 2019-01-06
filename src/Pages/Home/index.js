@@ -33,7 +33,7 @@ listPosts(){
   if(this.state.posts)
   {
 return this.state.posts.reverse().map((post, index) => 
-(<Post author={post.author} authorpic={post.authorpic} img={post.img} epi={post.epi} key={index}/>));
+(<Post author={post.author} authorpic={post.authorpic} img={post.img} epi={post.epi} key={index} date={post.date} />));
  }}
 
 fetchPosts(){

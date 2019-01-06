@@ -40,7 +40,7 @@ class Individual extends Component {
 
       listPosts(){
           if(this.state.post){
-              return (<Post author={this.state.post.author} authorpic={this.state.post.authorpic} img={this.state.post.img} epi={this.state.post.epi}/>);
+              return (<Post author={this.state.post.author} authorpic={this.state.post.authorpic} img={this.state.post.img} epi={this.state.post.epi} date={this.state.post.date} />);
           }else{
               return("404 POST NOT FOUND");
           }

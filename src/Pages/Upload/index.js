@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import firebase from 'firebase';
 import {Redirect} from 'react-router-dom';
+import moment from 'moment';
 
 
 class Upload extends Component {
@@ -86,7 +87,9 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
 
   // Get a key for a new Post.
   var newPostKey = firebase.database().ref().child('posts').push().key;
-
+  //GET TIMESTAMP
+  var now = Date.now();
+  const timestamp = moment().unix();
     // A post entry.
     var postData = {
       author: firebase.auth().currentUser.displayName,
@@ -94,6 +97,7 @@ uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
       img: this.state.url,
       epi: this.state.epi,
       key: newPostKey,
+      date: timestamp,
     };
 
   // Write the new post's data simultaneously in the posts list and the user's post list.

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {Link} from 'react-router-dom';
 import './Post.css';
+import Moment from 'react-moment';
 class Post extends Component {
  
   render() {
@@ -13,6 +14,7 @@ class Post extends Component {
             <div className="Post-user-nickname">
              <Link to={'/user/' + this.props.author} ><span>{this.props.author}</span></Link>
             </div>
+            <div className="timestamp"><Moment unix fromNow>{this.props.date}</Moment></div>
           </div>
         </header>
         <div className="Post-image">
