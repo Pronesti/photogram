@@ -19,9 +19,11 @@ class Post extends Component {
               </Link>
             </div>
             <div className='timestamp'>
-              <Moment unix fromNow>
-                {this.props.date}
-              </Moment>
+              <Link to={'/post/' + this.props.postkey}>
+                <Moment unix fromNow>
+                  {this.props.date}
+                </Moment>
+              </Link>
             </div>
           </div>
         </header>

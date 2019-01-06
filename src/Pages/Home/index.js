@@ -39,6 +39,7 @@ class Home extends Component {
             epi={post.epi}
             key={index}
             date={post.date}
+            postkey={post.key}
           />
         ));
     }
