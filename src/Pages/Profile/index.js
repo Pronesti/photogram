@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import {Redirect, Link} from 'react-router-dom';
 import './Profile.css';
 import '../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
+import Tile from '../../Components/Tile';
 
 
 class Profile extends Component {
@@ -58,21 +59,7 @@ class Profile extends Component {
       if(this.state.posts)
       {
     return this.state.posts.reverse().map(post => 
-    ( <Link to={'/post/' + post.key}>
-      <div className="gallery-item" tabIndex="0">
-
-      <img src={post.img} className="gallery-image" alt={post.author} />
-
-      <div className="gallery-item-info">
-
-        <ul>
-          <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><i className="fas fa-heart" aria-hidden="true"></i> 56</li>
-          <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><i className="fas fa-comment" aria-hidden="true"></i> 2</li>
-        </ul>
-
-      </div>
-
-    </div></Link>
+    ( <Tile img={post.img} author={post.author} postkey={post.key} />
     ));
      }}
     
